@@ -1,0 +1,72 @@
+// Attention Flow
+digraph {
+	rankdir=TB
+	subgraph cluster_0 {
+		color="#f0f0f0" label="Step 1: Input Tokens with Embeddings" style=filled
+		t1 [label="法國 [0.1, -0.2]"]
+		t2 [label="紅酒 [0.4, 0.1]"]
+		t3 [label="牛舌 [0.3, 0.2]"]
+	}
+	subgraph cluster_1 {
+		color="#e1f5fe" label="Linear Transformation" style=filled
+		q [label="Queries (Q)"]
+		k [label="Keys (K)"]
+		v [label="Values (V)"]
+	}
+	subgraph cluster_2 {
+		color="#e8f5e9" label="Token Vectors" style=filled
+		q1 [label="法國 Q: [0.2, 0.1]"]
+		q2 [label="紅酒 Q: [0.3, -0.1]"]
+		q3 [label="牛舌 Q: [0.1, 0.4]"]
+		k1 [label="法國 K: [0.1, 0.3]"]
+		k2 [label="紅酒 K: [0.2, -0.2]"]
+		k3 [label="牛舌 K: [0.5, 0.0]"]
+		v1 [label="法國 V: [0.4, 0.2]"]
+		v2 [label="紅酒 V: [0.3, -0.1]"]
+		v3 [label="牛舌 V: [0.2, 0.5]"]
+	}
+	subgraph cluster_3 {
+		color="#fff3e0" label="Step 2: Query-Key Comparison" style=filled
+		c1 [label="牛舌·法國 = 0.13"]
+		c2 [label="牛舌·紅酒 = -0.06"]
+		c3 [label="牛舌·牛舌 = 0.05"]
+	}
+	subgraph cluster_4 {
+		color="#fce4ec" label="Step 3: Scale and Softmax" style=filled
+		n1 [label="Scale: [0.065, -0.03, 0.025]"]
+		n2 [label="Weights: [0.38, 0.30, 0.32]"]
+	}
+	subgraph cluster_5 {
+		color="#f3e5f5" label="Step 4: Weighted Values" style=filled
+		w1 [label="法國: [0.152, 0.076]"]
+		w2 [label="紅酒: [0.09, -0.03]"]
+		w3 [label="牛舌: [0.064, 0.16]"]
+		sum [label="Final: [0.306, 0.206]"]
+	}
+	subgraph cluster_6 {
+		color="#e8eaf6" label="Context-Aware Representations" style=filled
+		o1 [label="法國': [x, y]"]
+		o2 [label="紅酒': [a, b]"]
+		o3 [label="牛舌': [0.306, 0.206]"]
+	}
+	t1 -> q
+	t2 -> q
+	t3 -> q
+	q -> q1
+	q -> q2
+	q -> q3
+	q3 -> c1
+	q3 -> c2
+	q3 -> c3
+	c1 -> n1
+	c2 -> n1
+	c3 -> n1
+	n1 -> n2
+	n2 -> w1
+	n2 -> w2
+	n2 -> w3
+	w1 -> sum
+	w2 -> sum
+	w3 -> sum
+	sum -> o3
+}
